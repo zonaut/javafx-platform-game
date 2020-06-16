@@ -1,6 +1,7 @@
 package com.zonaut.games.javafx.platform;
 
 import com.zonaut.games.javafx.platform.config.AppConfig;
+import com.zonaut.games.javafx.platform.screens.ScreenType;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -20,7 +21,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        primaryStage.setTitle(AppConfig.getTitle());
+        primaryStage.setTitle(AppConfig.getTitle() + " - " + AppConfig.getVersion());
 
         primaryStage.setResizable(false);
         primaryStage.setHeight(AppConfig.getWindowHeight());
@@ -37,10 +38,7 @@ public class App extends Application {
             primaryStage.close();
         });
 
-        // TODO Create and set a scene as a starting screen of the game
-        //primaryStage.setScene();
-
-        primaryStage.show();
+        ScreenType.switchScreenTo(ScreenType.MENU, primaryStage);
 
         LOG.debug("App has started.");
 
