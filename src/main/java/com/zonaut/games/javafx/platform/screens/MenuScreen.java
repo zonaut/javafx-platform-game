@@ -41,10 +41,6 @@ public class MenuScreen extends AbstractScreen {
         menuNew.setFont(font);
         menuNew.setFill(textColor);
 
-        Text menuLoad = new Text("(L)oad game");
-        menuLoad.setFont(font);
-        menuLoad.setFill(textColor);
-
         Text menuOptions = new Text("(O)ptions");
         menuOptions.setFont(font);
         menuOptions.setFill(textColor);
@@ -55,7 +51,7 @@ public class MenuScreen extends AbstractScreen {
 
         VBox menuWrapper = new VBox(10);
         menuWrapper.setAlignment(Pos.CENTER);
-        menuWrapper.getChildren().addAll(menuNew, menuLoad, menuOptions, menuQuit);
+        menuWrapper.getChildren().addAll(menuNew, menuOptions, menuQuit);
 
         centerWrapper.getChildren().addAll(titleWrapper, menuWrapper);
 
@@ -67,9 +63,6 @@ public class MenuScreen extends AbstractScreen {
         scene.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.N)) {
                 ScreenType.switchScreenTo(ScreenType.NEW, stage);
-            }
-            if (keyEvent.getCode().equals(KeyCode.L)) {
-                ScreenType.switchScreenTo(ScreenType.LOAD, stage);
             }
             if (keyEvent.getCode().equals(KeyCode.O)) {
                 ScreenType.switchScreenTo(ScreenType.OPTIONS, stage);

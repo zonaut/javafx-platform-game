@@ -8,7 +8,6 @@ public enum  ScreenType {
 
     MENU,
     NEW,
-    LOAD,
     OPTIONS
     ;
 
@@ -16,7 +15,6 @@ public enum  ScreenType {
     static {
         SCREENS.put(ScreenType.MENU, new MenuScreen());
         SCREENS.put(ScreenType.NEW, new NewGameScreen());
-        SCREENS.put(ScreenType.LOAD, new LoadGameScreen());
         SCREENS.put(ScreenType.OPTIONS, new OptionsScreen());
     }
 

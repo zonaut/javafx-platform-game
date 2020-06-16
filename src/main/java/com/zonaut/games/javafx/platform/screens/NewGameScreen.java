@@ -1,12 +1,18 @@
 package com.zonaut.games.javafx.platform.screens;
 
 import com.zonaut.games.javafx.platform.config.AppConfig;
+import com.zonaut.games.javafx.platform.level.LevelLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 public class NewGameScreen extends AbstractScreen {
@@ -16,8 +22,9 @@ public class NewGameScreen extends AbstractScreen {
     private final int menuWrapperX = (AppConfig.getWindowWidth() / 2) - (menuWrapperWidth / 2);
     private final int menuWrapperY = (AppConfig.getWindowHeight() / 2) - (menuWrapperHeight / 2);
 
+    private Group sceneRoot = new Group();
+
     public NewGameScreen() {
-        Pane sceneRoot = new Pane();
         this.scene = new Scene(sceneRoot, AppConfig.getWindowWidth(), AppConfig.getWindowHeight());
 
         VBox centerWrapper = new VBox(10);
@@ -41,9 +48,13 @@ public class NewGameScreen extends AbstractScreen {
         menuBack.setFont(font);
         menuBack.setFill(textColor);
 
+        Text menuLoadLevel = new Text("(L)oad level 1");
+        menuLoadLevel.setFont(font);
+        menuLoadLevel.setFill(textColor);
+
         VBox menuWrapper = new VBox(10);
         menuWrapper.setAlignment(Pos.CENTER);
-        menuWrapper.getChildren().addAll(menuBack);
+        menuWrapper.getChildren().addAll(menuBack, menuLoadLevel);
 
         centerWrapper.getChildren().addAll(titleWrapper, menuWrapper);
 
@@ -56,6 +67,45 @@ public class NewGameScreen extends AbstractScreen {
             if (keyEvent.getCode().equals(KeyCode.G)) {
                 ScreenType.switchScreenTo(ScreenType.MENU, stage);
             }
+            if (keyEvent.getCode().equals(KeyCode.L)) {
+                //drawScreenWithoutCanvas();
+                drawScreenInCanvas();
+            }
         });
+    }
+
+    void drawScreenInCanvas() {
+        final LevelLoader levelLoader = new LevelLoader(1);
+        final Canvas canvas = new Canvas(levelLoader.getLevelPixelWidth(), levelLoader.getLevelPixelHeight());
+        final GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
+
+        // TODO background color, background image, parallax, ... ?
+        graphicsContext.setFill(levelLoader.getLevelConfig().getLevelBackgroundColor());
+        graphicsContext.fillRect(0 , 0 , levelLoader.getLevelPixelWidth(), levelLoader.getLevelPixelHeight());
+
+        Group group = new Group();
+        group.getChildren().add(canvas);
+
+        sceneRoot.getChildren().clear();
+        sceneRoot.getChildren().add(group);
+
+        levelLoader.drawLayer(graphicsContext);
+
+        double minLayoutY = -1 * levelLoader.getLevelPixelHeight() + AppConfig.getWindowHeight() - AppConfig.getTileSize() + (AppConfig.getTileSize() / 4);
+        group.setLayoutY(minLayoutY);
+    }
+
+    void drawScreenWithoutCanvas() {
+        final LevelLoader levelLoader = new LevelLoader(1);
+
+        Group group = new Group();
+
+        sceneRoot.getChildren().clear();
+        sceneRoot.getChildren().add(group);
+
+        levelLoader.drawLayer(group);
+
+        double minLayoutY = -1 * levelLoader.getLevelPixelHeight() + AppConfig.getWindowHeight() - AppConfig.getTileSize() + (AppConfig.getTileSize() / 4);
+        group.setLayoutY(minLayoutY);
     }
 }

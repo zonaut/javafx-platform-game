@@ -6,8 +6,9 @@ import java.util.Properties;
 public class AppConfig {
 
     private static final Properties PROPERTIES = new Properties();
-
     private static final String PROPERTIES_FILE = "application.properties";
+
+    private static final String RESOURCES_PATH = "src/main/resources";
 
     private static String version;
     private static String title;
@@ -20,6 +21,12 @@ public class AppConfig {
     private static String basePath;
 
     private static String icon;
+
+    private static String levelPath;
+    private static String levelFilePath;
+    private static String levelPropertiesFile;
+
+    private static int tileSize;
 
     static {
         try (InputStream inputStream = AppConfig.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
@@ -40,6 +47,12 @@ public class AppConfig {
             basePath = parseString("app.paths.base");
 
             icon = basePath + parseString("app.icon");
+
+            levelPath = basePath + parseString("app.paths.level.path");
+            levelFilePath = "/" + parseString("app.paths.level.file");
+            levelPropertiesFile = "/" + parseString("app.paths.level.properties");
+
+            tileSize = parseInt("app.tile.size");
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -68,6 +81,11 @@ public class AppConfig {
     /// Getters
     ///
 
+
+    public static String getResourcesPath() {
+        return RESOURCES_PATH;
+    }
+
     public static String getVersion() {
         return version;
     }
@@ -94,5 +112,21 @@ public class AppConfig {
 
     public static String getIcon() {
         return icon;
+    }
+
+    public static String getLevelPath() {
+        return levelPath;
+    }
+
+    public static String getLevelFilePath() {
+        return levelFilePath;
+    }
+
+    public static String getLevelPropertiesFile() {
+        return levelPropertiesFile;
+    }
+
+    public static int getTileSize() {
+        return tileSize;
     }
 }
