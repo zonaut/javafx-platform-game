@@ -2,17 +2,16 @@ package com.zonaut.games.javafx.platform.screens;
 
 import com.zonaut.games.javafx.platform.config.AppConfig;
 import com.zonaut.games.javafx.platform.level.LevelLoader;
+import com.zonaut.games.javafx.platform.utils.ImageUtil;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.BlendMode;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 public class NewGameScreen extends AbstractScreen {
@@ -93,6 +92,8 @@ public class NewGameScreen extends AbstractScreen {
 
         double minLayoutY = -1 * levelLoader.getLevelPixelHeight() + AppConfig.getWindowHeight() - AppConfig.getTileSize() + (AppConfig.getTileSize() / 4);
         group.setLayoutY(minLayoutY);
+
+        drawPLayer(graphicsContext);
     }
 
     void drawScreenWithoutCanvas() {
@@ -107,5 +108,11 @@ public class NewGameScreen extends AbstractScreen {
 
         double minLayoutY = -1 * levelLoader.getLevelPixelHeight() + AppConfig.getWindowHeight() - AppConfig.getTileSize() + (AppConfig.getTileSize() / 4);
         group.setLayoutY(minLayoutY);
+    }
+
+    void drawPLayer(GraphicsContext graphicsContext) {
+        Image image = new Image(NewGameScreen.class.getResourceAsStream("/sprites/player.png"));
+        Image[] sprite = ImageUtil.getFrom(image, 0, 0, 32, 32, 2);
+        graphicsContext.drawImage(sprite[1], 4 * 32, 59 * 32);
     }
 }
