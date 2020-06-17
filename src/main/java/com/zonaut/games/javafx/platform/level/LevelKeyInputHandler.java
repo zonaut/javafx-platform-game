@@ -37,6 +37,9 @@ public class LevelKeyInputHandler {
         if (activeKeys.contains(KeyCode.UP)) {
             player.jump();
         }
+        if (activeKeys.contains(KeyCode.SPACE)) {
+            player.shoot();
+        }
     }
 
 }

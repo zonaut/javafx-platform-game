@@ -10,6 +10,9 @@ import javafx.scene.image.ImageView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player extends ImageView {
 
     private static final Logger LOG = LogManager.getLogger(Player.class);
@@ -23,14 +26,20 @@ public class Player extends ImageView {
     private LevelLoader levelLoader;
 
     private Image[] playerSprite;
-    private int playerWidth = 32;
-    private int playerHeight = 32;
+    private int width = 32;
+    private int height = 32;
 
     private double yMotionPosition;
 
     private boolean isMovingLeft;
     private boolean isMovingRight;
     private boolean isJumping;
+
+    private boolean isFacingRight = true;
+
+    private List<Bullet> bullets = new ArrayList<>();
+    private long bulletDelay = 200;
+    private long lastBulletFiredOn = System.currentTimeMillis();
 
     public Player(LevelLoader levelLoader, double x, double y) {
         this.levelLoader = levelLoader;
@@ -39,11 +48,11 @@ public class Player extends ImageView {
         setY(y);
 
         // TODO Use sprites for different player movement action like idle, walking, ...
-        Image image = new Image(NewGameScreen.class.getResourceAsStream("/sprites/player.png"));
+        Image image = new Image(NewGameScreen.class.getResourceAsStream("/images/entities/player.png"));
         playerSprite = ImageUtil.getFrom(image, 0, 0, 32, 32, 2);
         setImage(playerSprite[1]);
-        setFitWidth(playerWidth);
-        setFitHeight(playerHeight);
+        setFitWidth(width);
+        setFitHeight(height);
     }
 
     /**
@@ -71,12 +80,12 @@ public class Player extends ImageView {
         double OFFSET = 0.01;
 
         // Check collisions with solid tiles on the X axis and reposition the player if it collides
-        for (Block block : levelLoader.getSolidBlocks()) {
+        for (Block block : levelLoader.getBlocks()) {
             if (intersects(block)) {
-                if (isMovingRight) {
-                    setX(block.getMinX() - playerWidth - OFFSET);
+                if (isMovingRight && !block.isCanPassWhenJumping()) {
+                    setX(block.getMinX() - width - OFFSET);
                 }
-                if (isMovingLeft) {
+                if (isMovingLeft && !block.isCanPassWhenJumping()) {
                     setX(block.getMaxX() + OFFSET);
                 }
             }
@@ -89,13 +98,13 @@ public class Player extends ImageView {
         // Check collisions with solid tiles on the Y axis and reposition the player if it collides
         boolean jumping = yMotionPosition < 0;
         boolean falling = yMotionPosition > 0;
-        for (Block block : levelLoader.getSolidBlocks()) {
+        for (Block block : levelLoader.getBlocks()) {
             if (intersects(block)) {
-                if (jumping) {
+                if (jumping && !block.isCanPassWhenJumping()) {
                     setY(block.getMinY() + AppConfig.getTileSize() + OFFSET);
                     yMotionPosition = 0;
                 } else if (falling) {
-                    setY(block.getMinY() - playerHeight - OFFSET);
+                    setY(block.getMinY() - height - OFFSET);
                     isJumping = false;
                     yMotionPosition = 0;
                 }
@@ -107,11 +116,13 @@ public class Player extends ImageView {
     public void moveRight() {
         isMovingRight = true;
         isMovingLeft = false;
+        isFacingRight = true;
     }
 
     public void moveLeft() {
         isMovingLeft = true;
         isMovingRight = false;
+        isFacingRight = false;
     }
 
     public void stopMovingRightOrLeft() {
@@ -126,15 +137,30 @@ public class Player extends ImageView {
         isJumping = true;
     }
 
+    public void shoot() {
+        if (System.currentTimeMillis() < lastBulletFiredOn + bulletDelay) {
+            return;
+        }
+        LOG.info("Shooting bullet ...");
+        Bullet bullet = new Bullet(getX(), getY(), isFacingRight, levelLoader, this);
+        bullets.add(bullet);
+        levelLoader.getCurrentLevel().getChildren().add(bullet);
+        lastBulletFiredOn = System.currentTimeMillis();
+    }
+
     ///
     /// Getters
     ///
 
-    public boolean isMovingLeft() {
-        return isMovingLeft;
+    public int getWidth() {
+        return width;
     }
 
-    public boolean isMovingRight() {
-        return isMovingRight;
+    public int getHeight() {
+        return height;
+    }
+
+    public List<Bullet> getBullets() {
+        return bullets;
     }
 }

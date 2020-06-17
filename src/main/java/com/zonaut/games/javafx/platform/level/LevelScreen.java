@@ -1,6 +1,7 @@
 package com.zonaut.games.javafx.platform.level;
 
 import com.zonaut.games.javafx.platform.config.AppConfig;
+import com.zonaut.games.javafx.platform.entities.Bullet;
 import com.zonaut.games.javafx.platform.entities.Player;
 import com.zonaut.games.javafx.platform.level.overlays.LevelDebugOverlay;
 import com.zonaut.games.javafx.platform.screens.Screen;
@@ -49,18 +50,18 @@ public class LevelScreen implements Screen {
         stage.setHeight(AppConfig.getWindowHeight());
         stage.setWidth(AppConfig.getWindowWidth());
 
-        // TODO create a game state manager that we inject and use as a global way of accessing things and states
-        levelLoader = new LevelLoader(levelNumber);
-
         currentLevel = new Group();
+
+        // TODO create a game state manager that we inject and use as a global way of accessing things and states
+        levelLoader = new LevelLoader(currentLevel, levelNumber);
+
         sceneRoot.getChildren().clear();
         sceneRoot.getChildren().add(currentLevel);
 
-        levelLoader.drawLayersOn(currentLevel);
-
         // TODO Temp player start position, get this from level information
         playerStartPositionX = 0;
-        playerStartPositionY = (levelLoader.getMapHeight() -2) * 32;
+        int playerStartPositionYOffset = 10; // An offset to make sure we don't start into a tile due to gravity
+        playerStartPositionY = (levelLoader.getMapHeight() -2) * AppConfig.getTileSize() - playerStartPositionYOffset;
 
         player = new Player(levelLoader, playerStartPositionX, playerStartPositionY);
         currentLevel.getChildren().add(player);
@@ -108,10 +109,33 @@ public class LevelScreen implements Screen {
             player.setX(playerStartPositionX);
             player.setY(playerStartPositionY);
             currentLevel.setLayoutX(playerStartPositionX);
-
-            levelDebugOverlay.showMessage("You just died !", false);
+            levelDebugOverlay.showMessage("You just died ! Resetting player to start position.", false);
         }
 
+        // Collect coins if we intersect them
+        // TODO Move this to player or keep in loop ?
+        levelLoader.getCollectibles().removeIf(block -> {
+            if (player.intersects(block.getBoundsInParent())) {
+                currentLevel.getChildren().remove(block);
+                String message = String.format("Picked up a coin on X %f - Y %f", block.getBoundsInParent().getMinX(), block.getBoundsInParent().getMinY());
+                levelDebugOverlay.showMessage(message, true);
+                return true;
+            }
+            return false;
+        });
+
+        // Loop over each bullet and remove it if it is out of the level
+        player.getBullets().removeIf(bullet -> {
+            if (bullet.isOutOfLevelBounds()) {
+                currentLevel.getChildren().remove(bullet);
+                return true;
+            }
+            return false;
+        });
+        // Update bullets
+        for (Bullet bullet : player.getBullets()) {
+            bullet.tick();
+        }
     }
 
     /**

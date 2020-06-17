@@ -25,6 +25,12 @@ public class LevelLoader {
 
     private static final Logger LOG = LogManager.getLogger(LevelLoader.class);
 
+    private static final List<Integer> SOLID_TILE_IDS = List.of(2, 3);
+    private static final List<Integer> PASSABLE_TILE_IDS = List.of(4);
+    private static final List<Integer> COLLECTIBALE_TILE_IDS = List.of(5);
+
+    private Group currentLevel;
+
     private LevelConfig levelConfig;
 
     private int mapWidth;
@@ -34,9 +40,12 @@ public class LevelLoader {
     private int levelPixelHeight;
 
     private HashMap<Integer, Image> tiles = new HashMap<>();
-    private List<Block> solidBlocks = new ArrayList<>();
 
-    public LevelLoader(int levelNumber) {
+    private List<Block> blocks = new ArrayList<>();
+
+    private List<ImageView> collectibles = new ArrayList<>();
+
+    public LevelLoader(Group currentLevel, int levelNumber) {
 
         levelConfig = new LevelConfig(AppConfig.getLevelPath() + levelNumber + AppConfig.getLevelPropertiesFile(), levelNumber);
         LOG.info("Loading level {} : {} ... ", levelNumber, levelConfig.getLevelTitle());
@@ -47,13 +56,13 @@ public class LevelLoader {
 
             Map map = mapReader.readMap(filename);
 
+            this.currentLevel = currentLevel;
+
             mapWidth = map.getWidth();
             mapHeight = map.getHeight();
 
             levelPixelHeight = mapHeight * AppConfig.getTileSize();
             levelPixelWidth = mapWidth * AppConfig.getTileSize();
-
-            List<Integer> SOLID_TILE_IDS = List.of(2, 3);
 
             // TODO Fixed names for layers so we know what layer does what
             String BASE_LAYER_NAME = "base-layer";
@@ -81,10 +90,28 @@ public class LevelLoader {
                                 tiles.put(tileId, convertedImage);
                             }
 
+                            Block block = new Block(positionX, positionY, AppConfig.getTileSize(), AppConfig.getTileSize(), tileId);
+                            ImageView imageView = new ImageView(tiles.get(block.getId()));
+                            imageView.setTranslateX(block.getMinX());
+                            imageView.setTranslateY(block.getMinY());
+
                             if (SOLID_TILE_IDS.contains(tileId)) {
-                                Block block = new Block(positionX, positionY, AppConfig.getTileSize(), AppConfig.getTileSize(), tileId);
-                                solidBlocks.add(block);
+                                blocks.add(block);
+                                currentLevel.getChildren().add(imageView);
                                 LOG.info("Solid tile at position {}:{}", positionX, positionY);
+                            }
+                            if (PASSABLE_TILE_IDS.contains(tileId)) {
+                                block.setCanPassWhenJumping(true);
+                                blocks.add(block);
+                                currentLevel.getChildren().add(imageView);
+                                LOG.info("Passable tile at position {}:{}", positionX, positionY);
+                            }
+                            if (COLLECTIBALE_TILE_IDS.contains(tileId)) {
+                                currentLevel.getChildren().add(imageView);
+                                if (COLLECTIBALE_TILE_IDS.contains(block.getId())) {
+                                    collectibles.add(imageView);
+                                }
+                                LOG.info("Coin tile at position {}:{}", positionX, positionY);
                             }
                         }
                     }
@@ -110,21 +137,16 @@ public class LevelLoader {
         return new Image(byteArrayInputStream);
     }
 
-    public void drawLayersOn(Group group) {
-        for (Block block : solidBlocks) {
-            ImageView baseImageTile = new ImageView(tiles.get(block.getId()));
-            baseImageTile.setTranslateX(block.getMinX());
-            baseImageTile.setTranslateY(block.getMinY());
-            group.getChildren().add(baseImageTile);
-        }
-    }
-
     ///
     /// Getters
     ///
 
     public LevelConfig getLevelConfig() {
         return levelConfig;
+    }
+
+    public Group getCurrentLevel() {
+        return currentLevel;
     }
 
     public int getMapWidth() {
@@ -143,7 +165,11 @@ public class LevelLoader {
         return levelPixelHeight;
     }
 
-    public List<Block> getSolidBlocks() {
-        return solidBlocks;
+    public List<Block> getBlocks() {
+        return blocks;
+    }
+
+    public List<ImageView> getCollectibles() {
+        return collectibles;
     }
 }
