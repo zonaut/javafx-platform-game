@@ -1,5 +1,6 @@
 package com.zonaut.games.javafx.platform.screens;
 
+import com.zonaut.games.javafx.platform.screens.level.LevelScreen;
 import javafx.stage.Stage;
 
 import java.util.EnumMap;
@@ -20,6 +21,11 @@ public enum  ScreenType {
 
     public static void switchScreenTo(ScreenType type, Stage stage) {
         SCREENS.get(type).display(stage);
+    }
+
+    public static void loadLevel(Stage stage, int level) {
+        Screen levelScreen = new LevelScreen(level);
+        levelScreen.display(stage);
     }
 
 }

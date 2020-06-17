@@ -28,6 +28,8 @@ public class AppConfig {
 
     private static int tileSize;
 
+    private static double fps;
+
     static {
         try (InputStream inputStream = AppConfig.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
             if (inputStream == null) {
@@ -53,6 +55,8 @@ public class AppConfig {
             levelPropertiesFile = "/" + parseString("app.paths.level.properties");
 
             tileSize = parseInt("app.tile.size");
+
+            fps = parseInt("app.fps");
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -128,5 +132,9 @@ public class AppConfig {
 
     public static int getTileSize() {
         return tileSize;
+    }
+
+    public static double getFps() {
+        return fps;
     }
 }

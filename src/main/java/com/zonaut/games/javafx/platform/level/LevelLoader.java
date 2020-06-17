@@ -3,7 +3,6 @@ package com.zonaut.games.javafx.platform.level;
 import com.zonaut.games.javafx.platform.config.AppConfig;
 import com.zonaut.games.javafx.platform.config.LevelConfig;
 import javafx.scene.Group;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.apache.logging.log4j.LogManager;
@@ -80,7 +79,7 @@ public class LevelLoader {
                             }
 
                             if (SOLID_TILE_IDS.contains(tileId)) {
-                                Block block = new Block(tileId, positionX, positionY, AppConfig.getTileSize(), AppConfig.getTileSize());
+                                Block block = new Block(positionX, positionY, AppConfig.getTileSize(), AppConfig.getTileSize(), tileId);
                                 solidBlocks.add(block);
                                 LOG.info("Solid tile at position {}:{}", positionX, positionY);
                             }
@@ -108,31 +107,13 @@ public class LevelLoader {
         return new Image(byteArrayInputStream);
     }
 
-    public void drawLayer(Group group) {
-        ImageView baseImageTile = new ImageView(tiles.get(2));
-        baseImageTile.setTranslateX(0 * 32);
-        baseImageTile.setTranslateY(59 * 32);
-        group.getChildren().add(baseImageTile);
-//        for (Block block : solidBlocks) {
-//            ImageView baseImageTile = new ImageView(tiles.get(block.getId()));
-//            baseImageTile.setTranslateX(block.getMinX());
-//            baseImageTile.setTranslateY(block.getMinY());
-//            group.getChildren().add(baseImageTile);
-//        }
-    }
-
-    // TODO Just a test for now, draw correct tile on correct position
-    public void drawLayer(GraphicsContext graphicsContext) {
-        graphicsContext.drawImage(tiles.get(2), 0 * 32, 59 * 32);
-//        for (int row = 0; row < levelPixelHeight / 32; row++) {
-//            for (int col = 0; col <  levelPixelWidth / 32; col++) {
-//                LOG.info("Drawing image on row {} col {}", row, col);
-//                if ((row & 1) == 0) { // temp test draw on even rows
-//                    // tiles.get(2) -> ID from tile
-//                    graphicsContext.drawImage(tiles.get(2), col * 32, row * 32);
-//                }
-//            }
-//        }
+    public void drawLayersOn(Group group) {
+        for (Block block : solidBlocks) {
+            ImageView baseImageTile = new ImageView(tiles.get(block.getId()));
+            baseImageTile.setTranslateX(block.getMinX());
+            baseImageTile.setTranslateY(block.getMinY());
+            group.getChildren().add(baseImageTile);
+        }
     }
 
     ///
