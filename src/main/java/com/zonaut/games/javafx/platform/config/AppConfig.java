@@ -29,6 +29,7 @@ public class AppConfig {
     private static int tileSize;
 
     private static double fps;
+    private static double fpsInterval;
 
     static {
         try (InputStream inputStream = AppConfig.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
@@ -57,6 +58,7 @@ public class AppConfig {
             tileSize = parseInt("app.tile.size");
 
             fps = parseInt("app.fps");
+            fpsInterval = 1000 / fps;
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -136,5 +138,9 @@ public class AppConfig {
 
     public static double getFps() {
         return fps;
+    }
+
+    public static double getFpsInterval() {
+        return fpsInterval;
     }
 }

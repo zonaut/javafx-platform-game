@@ -23,7 +23,7 @@ public class LevelKeyInputHandler {
         scene.setOnKeyReleased(e -> activeKeys.remove(e.getCode()));
     }
 
-    public void update() {
+    public void handleCurrentInput() {
         if (activeKeys.contains(KeyCode.RIGHT) && !activeKeys.contains(KeyCode.LEFT)) {
             player.moveRight();
         }
@@ -32,6 +32,10 @@ public class LevelKeyInputHandler {
         }
         if (!activeKeys.contains(KeyCode.LEFT) && !activeKeys.contains(KeyCode.RIGHT)) {
             player.stopMovingRightOrLeft();
+        }
+
+        if (activeKeys.contains(KeyCode.UP)) {
+            player.jump();
         }
     }
 

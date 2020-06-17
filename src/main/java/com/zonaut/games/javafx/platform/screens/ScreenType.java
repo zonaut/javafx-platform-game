@@ -1,6 +1,6 @@
 package com.zonaut.games.javafx.platform.screens;
 
-import com.zonaut.games.javafx.platform.screens.level.LevelScreen;
+import com.zonaut.games.javafx.platform.level.LevelScreen;
 import javafx.stage.Stage;
 
 import java.util.EnumMap;

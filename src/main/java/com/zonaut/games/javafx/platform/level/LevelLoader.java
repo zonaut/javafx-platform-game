@@ -27,8 +27,11 @@ public class LevelLoader {
 
     private LevelConfig levelConfig;
 
-    private int levelPixelHeight;
+    private int mapWidth;
+    private int mapHeight;
+
     private int levelPixelWidth;
+    private int levelPixelHeight;
 
     private HashMap<Integer, Image> tiles = new HashMap<>();
     private List<Block> solidBlocks = new ArrayList<>();
@@ -44,13 +47,13 @@ public class LevelLoader {
 
             Map map = mapReader.readMap(filename);
 
-            int mapWidth = map.getWidth();
-            int mapHeight = map.getHeight();
+            mapWidth = map.getWidth();
+            mapHeight = map.getHeight();
 
             levelPixelHeight = mapHeight * AppConfig.getTileSize();
             levelPixelWidth = mapWidth * AppConfig.getTileSize();
 
-            List<Integer> SOLID_TILE_IDS = List.of(2);
+            List<Integer> SOLID_TILE_IDS = List.of(2, 3);
 
             // TODO Fixed names for layers so we know what layer does what
             String BASE_LAYER_NAME = "base-layer";
@@ -124,11 +127,23 @@ public class LevelLoader {
         return levelConfig;
     }
 
-    public int getLevelPixelHeight() {
-        return levelPixelHeight;
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public int getMapHeight() {
+        return mapHeight;
     }
 
     public int getLevelPixelWidth() {
         return levelPixelWidth;
+    }
+
+    public int getLevelPixelHeight() {
+        return levelPixelHeight;
+    }
+
+    public List<Block> getSolidBlocks() {
+        return solidBlocks;
     }
 }
