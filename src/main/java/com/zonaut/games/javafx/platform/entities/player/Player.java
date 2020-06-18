@@ -1,4 +1,4 @@
-package com.zonaut.games.javafx.platform.entities;
+package com.zonaut.games.javafx.platform.entities.player;
 
 import com.zonaut.games.javafx.platform.config.AppConfig;
 import com.zonaut.games.javafx.platform.level.Block;
@@ -19,13 +19,15 @@ public class Player extends ImageView {
 
     private static final double DELAY = 1.0 / AppConfig.getFps();
 
-    private static final double SPEED_X = 300; // Tweak value to desired speed
+    private static final double SPEED_X = 280; // Tweak value to desired speed
     private static final double JUMP_HEIGHT = 750; // Tweak value to desired height
-    private static final double GRAVITY_ACCELERATION = 2200; // Tweak value to desired speed of acceleration
+    private static final double GRAVITY_ACCELERATION = 2300; // Tweak value to desired speed of acceleration
 
     private LevelLoader levelLoader;
 
-    private Image[] playerSprite;
+    private Image[] playerIdleSprite;
+    private Image[] playerWalkRightSprite;
+    private Image[] playerWalkLeftSprite;
     private int width = 32;
     private int height = 32;
 
@@ -35,24 +37,31 @@ public class Player extends ImageView {
     private boolean isMovingRight;
     private boolean isJumping;
 
-    private boolean isFacingRight = true;
+    private boolean isFacingRight;
 
     private List<Bullet> bullets = new ArrayList<>();
     private long bulletDelay = 200;
     private long lastBulletFiredOn = System.currentTimeMillis();
 
-    public Player(LevelLoader levelLoader, double x, double y) {
+    public Player(LevelLoader levelLoader, double x, double y, boolean isFacingRight) {
         this.levelLoader = levelLoader;
 
         setX(x);
         setY(y);
 
+        this.isFacingRight = isFacingRight;
+
         // TODO Use sprites for different player movement action like idle, walking, ...
         Image image = new Image(NewGameScreen.class.getResourceAsStream(AppConfig.getPlayerImage()));
-        playerSprite = ImageUtil.getFrom(image, 0, 0, 32, 32, 2);
-        setImage(playerSprite[1]);
+
+        playerIdleSprite = ImageUtil.getFrom(image, 0, 0, 32, 32, 2);
+        playerWalkRightSprite = ImageUtil.getFrom(image, 0, 32, 32, 32, 1);
+        playerWalkLeftSprite = ImageUtil.getFrom(image, 0, 64, 32, 32, 1);
+
         setFitWidth(width);
         setFitHeight(height);
+
+        updateImage();
     }
 
     /**
@@ -61,6 +70,8 @@ public class Player extends ImageView {
      * TODO This needs to be tweaked a bit + additions for future actions
      */
     public void tick() {
+        // Set correct image
+        updateImage();
         // Move player on the X axis
         if (isMovingRight) {
             setX(getX() + SPEED_X * DELAY);
@@ -111,6 +122,16 @@ public class Player extends ImageView {
             }
         }
 
+    }
+
+    // TODO Do more things here like movement based on the sprite.
+    //      Also other states like idle, jumping, hurt, resetting player, ...
+    private void updateImage() {
+        if (isFacingRight) {
+            setImage(playerWalkRightSprite[0]);
+        } else {
+            setImage(playerWalkLeftSprite[0]);
+        }
     }
 
     public void moveRight() {

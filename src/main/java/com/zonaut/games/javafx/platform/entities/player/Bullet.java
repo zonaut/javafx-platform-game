@@ -1,4 +1,4 @@
-package com.zonaut.games.javafx.platform.entities;
+package com.zonaut.games.javafx.platform.entities.player;
 
 import com.zonaut.games.javafx.platform.config.AppConfig;
 import com.zonaut.games.javafx.platform.level.Block;

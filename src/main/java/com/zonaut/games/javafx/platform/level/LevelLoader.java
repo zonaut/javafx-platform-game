@@ -27,7 +27,7 @@ public class LevelLoader {
 
     private static final List<Integer> SOLID_TILE_IDS = List.of(2, 3);
     private static final List<Integer> PASSABLE_TILE_IDS = List.of(4);
-    private static final List<Integer> COLLECTIBALE_TILE_IDS = List.of(5);
+    private static final List<Integer> COLLECTIBLE_TILE_IDS = List.of(5, 6);
 
     private Group currentLevel;
 
@@ -106,9 +106,9 @@ public class LevelLoader {
                                 currentLevel.getChildren().add(imageView);
                                 LOG.info("Passable tile at position {}:{}", positionX, positionY);
                             }
-                            if (COLLECTIBALE_TILE_IDS.contains(tileId)) {
+                            if (COLLECTIBLE_TILE_IDS.contains(tileId)) {
                                 currentLevel.getChildren().add(imageView);
-                                if (COLLECTIBALE_TILE_IDS.contains(block.getId())) {
+                                if (COLLECTIBLE_TILE_IDS.contains(block.getId())) {
                                     collectibles.add(imageView);
                                 }
                                 LOG.info("Coin tile at position {}:{}", positionX, positionY);

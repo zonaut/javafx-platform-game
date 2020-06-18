@@ -1,8 +1,8 @@
 package com.zonaut.games.javafx.platform.level;
 
 import com.zonaut.games.javafx.platform.config.AppConfig;
-import com.zonaut.games.javafx.platform.entities.Bullet;
-import com.zonaut.games.javafx.platform.entities.Player;
+import com.zonaut.games.javafx.platform.entities.player.Bullet;
+import com.zonaut.games.javafx.platform.entities.player.Player;
 import com.zonaut.games.javafx.platform.level.overlays.LevelDebugOverlay;
 import com.zonaut.games.javafx.platform.screens.Screen;
 import javafx.animation.KeyFrame;
@@ -63,7 +63,7 @@ public class LevelScreen implements Screen {
         int playerStartPositionYOffset = 10; // An offset to make sure we don't start into a tile due to gravity
         playerStartPositionY = (levelLoader.getMapHeight() -2) * AppConfig.getTileSize() - playerStartPositionYOffset;
 
-        player = new Player(levelLoader, playerStartPositionX, playerStartPositionY);
+        player = new Player(levelLoader, playerStartPositionX, playerStartPositionY, true);
         currentLevel.getChildren().add(player);
 
         levelKeyInputHandler = new LevelKeyInputHandler(scene, player);
@@ -117,7 +117,7 @@ public class LevelScreen implements Screen {
         levelLoader.getCollectibles().removeIf(block -> {
             if (player.intersects(block.getBoundsInParent())) {
                 currentLevel.getChildren().remove(block);
-                String message = String.format("Picked up a coin on X %f - Y %f", block.getBoundsInParent().getMinX(), block.getBoundsInParent().getMinY());
+                String message = String.format("Picked up a collectible on X %f - Y %f", block.getBoundsInParent().getMinX(), block.getBoundsInParent().getMinY());
                 levelDebugOverlay.showMessage(message, true);
                 return true;
             }
