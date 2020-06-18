@@ -1,5 +1,6 @@
 package com.zonaut.games.javafx.platform.config;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -8,7 +9,9 @@ public class AppConfig {
     private static final Properties PROPERTIES = new Properties();
     private static final String PROPERTIES_FILE = "application.properties";
 
-    private static final String RESOURCES_PATH = "src/main/resources";
+    private static final String UNIX_FILE_SEPARATOR = "/";
+
+    private static final String RESOURCES_PATH = replaceFileSeparator("src/main/resources");
 
     private static String version;
     private static String title;
@@ -31,6 +34,9 @@ public class AppConfig {
     private static double fps;
     private static double fpsInterval;
 
+    private static String playerImage;
+    private static String playerBulletImage;
+
     static {
         try (InputStream inputStream = AppConfig.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
             if (inputStream == null) {
@@ -47,18 +53,21 @@ public class AppConfig {
             windowHeight = parseInt("app.window.height");
             windowWidth = parseInt("app.window.width");
 
-            basePath = parseString("app.paths.base");
+            basePath = replaceFileSeparator(parseString("app.paths.base"));
 
             icon = basePath + parseString("app.icon");
 
-            levelPath = basePath + parseString("app.paths.level.path");
-            levelFilePath = "/" + parseString("app.paths.level.file");
-            levelPropertiesFile = "/" + parseString("app.paths.level.properties");
+            levelPath = basePath + replaceFileSeparator(parseString("app.paths.level.path"));
+            levelFilePath = File.separator + parseString("app.paths.level.file");
+            levelPropertiesFile = File.separator + parseString("app.paths.level.properties");
 
             tileSize = parseInt("app.tile.size");
 
             fps = parseInt("app.fps");
             fpsInterval = 1000 / fps;
+
+            playerImage = File.separator + replaceFileSeparator(parseString("app.player.image"));
+            playerBulletImage = File.separator + replaceFileSeparator(parseString("app.player.bullet.image"));
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -81,6 +90,10 @@ public class AppConfig {
     public static boolean parseBoolean(String property) {
         final String value = PROPERTIES.getProperty(property);
         return Boolean.parseBoolean(value);
+    }
+
+    public static String replaceFileSeparator(String value) {
+        return value.replace(UNIX_FILE_SEPARATOR, File.separator);
     }
 
     ///
@@ -142,5 +155,13 @@ public class AppConfig {
 
     public static double getFpsInterval() {
         return fpsInterval;
+    }
+
+    public static String getPlayerImage() {
+        return playerImage;
+    }
+
+    public static String getPlayerBulletImage() {
+        return playerBulletImage;
     }
 }

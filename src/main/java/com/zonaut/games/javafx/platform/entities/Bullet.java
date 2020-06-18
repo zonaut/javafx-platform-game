@@ -20,7 +20,7 @@ public class Bullet extends ImageView {
     private boolean isFacingRight;
 
     public Bullet(double x, double y, boolean isFacingRight, LevelLoader levelLoader, Player player) {
-        Image image = new Image(Bullet.class.getResourceAsStream("/images/entities/bullet.png"));
+        Image image = new Image(Bullet.class.getResourceAsStream(AppConfig.getPlayerBulletImage()));
         setImage(image);
 
         setFitWidth(image.getWidth());

@@ -48,7 +48,7 @@ public class Player extends ImageView {
         setY(y);
 
         // TODO Use sprites for different player movement action like idle, walking, ...
-        Image image = new Image(NewGameScreen.class.getResourceAsStream("/images/entities/player.png"));
+        Image image = new Image(NewGameScreen.class.getResourceAsStream(AppConfig.getPlayerImage()));
         playerSprite = ImageUtil.getFrom(image, 0, 0, 32, 32, 2);
         setImage(playerSprite[1]);
         setFitWidth(width);

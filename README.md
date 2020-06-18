@@ -4,6 +4,9 @@ An orthogonal platform game example using JavaFX.
 
 **This is a work in progress!**
 
+This is developed and tested on a Linux-based system.  
+I try to keep Win users into consideration when it comes to file separators but let me know if I missed something.
+
 ## Build & run
 
     // Run
