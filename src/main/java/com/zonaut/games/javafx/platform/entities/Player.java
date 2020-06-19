@@ -1,4 +1,4 @@
-package com.zonaut.games.javafx.platform.entities.player;
+package com.zonaut.games.javafx.platform.entities;
 
 import com.zonaut.games.javafx.platform.config.AppConfig;
 import com.zonaut.games.javafx.platform.level.Block;
@@ -22,14 +22,21 @@ public class Player extends ImageView {
     private static final double SPEED_X = 280; // Tweak value to desired speed
     private static final double JUMP_HEIGHT = 750; // Tweak value to desired height
     private static final double GRAVITY_ACCELERATION = 2300; // Tweak value to desired speed of acceleration
+    private static final int BULLET_DELAY = 250;
 
-    private LevelLoader levelLoader;
+    private final LevelLoader levelLoader;
 
-    private Image[] playerIdleSprite;
-    private Image[] playerWalkRightSprite;
-    private Image[] playerWalkLeftSprite;
-    private int width = 32;
-    private int height = 32;
+    private final Image[] idleSprite;
+    private final int idleSpriteDuration;
+    private final Image[] walkRightSprite;
+    private final int walkRightSpriteDuration;
+    private final Image[] walkLeftSprite;
+    private final int walkLeftSpriteDuration;
+
+    private Animation animation;
+
+    private double width;
+    private double height;
 
     private double yMotionPosition;
 
@@ -40,7 +47,6 @@ public class Player extends ImageView {
     private boolean isFacingRight;
 
     private List<Bullet> bullets = new ArrayList<>();
-    private long bulletDelay = 200;
     private long lastBulletFiredOn = System.currentTimeMillis();
 
     public Player(LevelLoader levelLoader, double x, double y, boolean isFacingRight) {
@@ -54,14 +60,26 @@ public class Player extends ImageView {
         // TODO Use sprites for different player movement action like idle, walking, ...
         Image image = new Image(NewGameScreen.class.getResourceAsStream(AppConfig.getPlayerImage()));
 
-        playerIdleSprite = ImageUtil.getFrom(image, 0, 0, 32, 32, 2);
-        playerWalkRightSprite = ImageUtil.getFrom(image, 0, 32, 32, 32, 1);
-        playerWalkLeftSprite = ImageUtil.getFrom(image, 0, 64, 32, 32, 1);
+        // Define all available sprites for our player
+        // TODO Get this from app config ???
+        idleSprite = ImageUtil.getFrom(image, 0, 0, 32, 32, 3);
+        idleSpriteDuration = 1500;
+        walkRightSprite = ImageUtil.getFrom(image, 0, 32, 32, 32, 2);
+        walkRightSpriteDuration = 300;
+        walkLeftSprite = ImageUtil.getFrom(image, 0, 64, 32, 32, 2);
+        walkLeftSpriteDuration = 300;
 
+        // TODO Will the player always have the same constraints or should this be placed under updateImage?
+        this.width = idleSprite[0].getWidth();
+        this.height = idleSprite[0].getHeight();
         setFitWidth(width);
         setFitHeight(height);
 
-        updateImage();
+        // Initial animation state of player
+        animation = new Animation(idleSpriteDuration, idleSprite);
+        animation.play();
+
+        updateAnimation();
     }
 
     /**
@@ -70,8 +88,9 @@ public class Player extends ImageView {
      * TODO This needs to be tweaked a bit + additions for future actions
      */
     public void tick() {
-        // Set correct image
-        updateImage();
+        // Update the entities animation
+        updateAnimation();
+
         // Move player on the X axis
         if (isMovingRight) {
             setX(getX() + SPEED_X * DELAY);
@@ -124,14 +143,16 @@ public class Player extends ImageView {
 
     }
 
-    // TODO Do more things here like movement based on the sprite.
-    //      Also other states like idle, jumping, hurt, resetting player, ...
-    private void updateImage() {
-        if (isFacingRight) {
-            setImage(playerWalkRightSprite[0]);
+    // TODO Maybe we put this in their respective method like jump, stopMoving,  ... ?
+    public void updateAnimation() {
+        if (isMovingRight) {
+            animation.setFrames(walkRightSpriteDuration, walkRightSprite);
+        } else if (isMovingLeft) {
+            animation.setFrames(walkLeftSpriteDuration, walkLeftSprite);
         } else {
-            setImage(playerWalkLeftSprite[0]);
+            animation.setFrames(idleSpriteDuration, idleSprite);
         }
+        setImage(animation.getImage());
     }
 
     public void moveRight() {
@@ -159,7 +180,7 @@ public class Player extends ImageView {
     }
 
     public void shoot() {
-        if (System.currentTimeMillis() < lastBulletFiredOn + bulletDelay) {
+        if (System.currentTimeMillis() < lastBulletFiredOn + BULLET_DELAY) {
             return;
         }
         LOG.info("Shooting bullet ...");
@@ -173,11 +194,7 @@ public class Player extends ImageView {
     /// Getters
     ///
 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 

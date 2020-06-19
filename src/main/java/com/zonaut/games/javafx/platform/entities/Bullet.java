@@ -1,4 +1,4 @@
-package com.zonaut.games.javafx.platform.entities.player;
+package com.zonaut.games.javafx.platform.entities;
 
 import com.zonaut.games.javafx.platform.config.AppConfig;
 import com.zonaut.games.javafx.platform.level.Block;
@@ -33,7 +33,7 @@ public class Bullet extends ImageView {
         setX(x);
 
         // TODO Tweak the starting position of the bullet a bit
-        setY(y + (player.getHeight() * 1.0 / 2) - (image.getHeight() / 2));
+        setY(y + (player.getHeight() / 2) - (image.getHeight() / 2));
 
         tick();
     }

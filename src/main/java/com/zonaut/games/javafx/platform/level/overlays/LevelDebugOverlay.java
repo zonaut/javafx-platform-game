@@ -1,6 +1,6 @@
 package com.zonaut.games.javafx.platform.level.overlays;
 
-import com.zonaut.games.javafx.platform.entities.player.Player;
+import com.zonaut.games.javafx.platform.entities.Player;
 import com.zonaut.games.javafx.platform.level.LevelLoader;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;

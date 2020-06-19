@@ -1,6 +1,6 @@
 package com.zonaut.games.javafx.platform.level;
 
-import com.zonaut.games.javafx.platform.entities.player.Player;
+import com.zonaut.games.javafx.platform.entities.Player;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import org.apache.logging.log4j.LogManager;

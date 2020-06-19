@@ -28,4 +28,6 @@ Let's keep it fun and spend our time on creating the actual game itself.
 
 ## Graphics
 
-The`_design-files` folder contains all source files which are created with [Gimp](https://www.gimp.org/). 
+The`_design-files` folder contains all source files which are created with [Inkscape](https://inkscape.org/) and [Gimp](https://www.gimp.org/).
+
+All files will be designed in Inkscape and then exported to png files to create an image sprite with Gimp.

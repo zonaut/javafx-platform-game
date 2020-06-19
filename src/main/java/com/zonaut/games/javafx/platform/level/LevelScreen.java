@@ -1,8 +1,8 @@
 package com.zonaut.games.javafx.platform.level;
 
 import com.zonaut.games.javafx.platform.config.AppConfig;
-import com.zonaut.games.javafx.platform.entities.player.Bullet;
-import com.zonaut.games.javafx.platform.entities.player.Player;
+import com.zonaut.games.javafx.platform.entities.Bullet;
+import com.zonaut.games.javafx.platform.entities.Player;
 import com.zonaut.games.javafx.platform.level.overlays.LevelDebugOverlay;
 import com.zonaut.games.javafx.platform.screens.Screen;
 import javafx.animation.KeyFrame;
@@ -59,6 +59,7 @@ public class LevelScreen implements Screen {
         sceneRoot.getChildren().add(currentLevel);
 
         // TODO Temp player start position, get this from level information
+        //      Also test other position and panning
         playerStartPositionX = 0;
         int playerStartPositionYOffset = 10; // An offset to make sure we don't start into a tile due to gravity
         playerStartPositionY = (levelLoader.getMapHeight() -2) * AppConfig.getTileSize() - playerStartPositionYOffset;
