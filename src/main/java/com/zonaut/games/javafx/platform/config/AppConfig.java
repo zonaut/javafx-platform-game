@@ -36,6 +36,7 @@ public class AppConfig {
 
     private static String playerImage;
     private static String playerBulletImage;
+    private static String crawlerImage;
 
     static {
         try (InputStream inputStream = AppConfig.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
@@ -68,6 +69,7 @@ public class AppConfig {
 
             playerImage = File.separator + replaceFileSeparator(parseString("app.player.image"));
             playerBulletImage = File.separator + replaceFileSeparator(parseString("app.player.bullet.image"));
+            crawlerImage = File.separator + replaceFileSeparator(parseString("app.player.crawler.image"));
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -163,5 +165,9 @@ public class AppConfig {
 
     public static String getPlayerBulletImage() {
         return playerBulletImage;
+    }
+
+    public static String getCrawlerImage() {
+        return crawlerImage;
     }
 }

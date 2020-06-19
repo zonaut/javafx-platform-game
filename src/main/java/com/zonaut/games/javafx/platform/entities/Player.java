@@ -58,7 +58,7 @@ public class Player extends ImageView {
         this.isFacingRight = isFacingRight;
 
         // TODO Use sprites for different player movement action like idle, walking, ...
-        Image image = new Image(NewGameScreen.class.getResourceAsStream(AppConfig.getPlayerImage()));
+        Image image = new Image(Player.class.getResourceAsStream(AppConfig.getPlayerImage()));
 
         // Define all available sprites for our player
         // TODO Get this from app config ???

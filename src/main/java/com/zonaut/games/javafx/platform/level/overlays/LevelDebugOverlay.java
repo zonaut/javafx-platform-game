@@ -86,7 +86,7 @@ public class LevelDebugOverlay extends Pane {
             AnimationTimer timer = new AnimationTimer() {
                 @Override
                 public void handle(long now) {
-                    if (start.isBefore(Instant.now().minus(Duration.ofSeconds(2)))) {
+                    if (start.isBefore(Instant.now().minus(Duration.ofMillis(1500)))) {
                         removeMessageWrapper();
                         stop();
                     }

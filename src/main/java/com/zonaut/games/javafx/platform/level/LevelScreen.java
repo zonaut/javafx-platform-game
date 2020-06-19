@@ -2,6 +2,7 @@ package com.zonaut.games.javafx.platform.level;
 
 import com.zonaut.games.javafx.platform.config.AppConfig;
 import com.zonaut.games.javafx.platform.entities.Bullet;
+import com.zonaut.games.javafx.platform.entities.Crawler;
 import com.zonaut.games.javafx.platform.entities.Player;
 import com.zonaut.games.javafx.platform.level.overlays.LevelDebugOverlay;
 import com.zonaut.games.javafx.platform.screens.Screen;
@@ -14,6 +15,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LevelScreen implements Screen {
 
@@ -34,6 +38,8 @@ public class LevelScreen implements Screen {
     private Player player;
     private double playerStartPositionX;
     private double playerStartPositionY;
+
+    private List<Crawler> crawlers = new ArrayList<>();
 
     private LevelDebugOverlay levelDebugOverlay;
 
@@ -65,7 +71,6 @@ public class LevelScreen implements Screen {
         playerStartPositionY = (levelLoader.getMapHeight() -2) * AppConfig.getTileSize() - playerStartPositionYOffset;
 
         player = new Player(levelLoader, playerStartPositionX, playerStartPositionY, true);
-        currentLevel.getChildren().add(player);
 
         levelKeyInputHandler = new LevelKeyInputHandler(scene, player);
 
@@ -82,6 +87,21 @@ public class LevelScreen implements Screen {
         levelDebugOverlay = new LevelDebugOverlay();
         levelDebugOverlay.updateLevelName(levelLoader);
         sceneRoot.getChildren().add(levelDebugOverlay);
+
+        /////////////////////////////////////////////////
+        /////////////////////////////////////////////////
+
+        // TODO Get location from object layers ???
+        double crawlerPositionY = (levelLoader.getMapHeight() -2) * AppConfig.getTileSize();
+        Crawler crawler = new Crawler(levelLoader, 640, crawlerPositionY + 7);
+        crawlers.add(crawler);
+        currentLevel.getChildren().add(crawler);
+
+        /////////////////////////////////////////////////
+        /////////////////////////////////////////////////
+
+        // Add the player as last to keep it in front of all other objects
+        currentLevel.getChildren().add(player);
 
         stage.show();
     }
@@ -127,15 +147,32 @@ public class LevelScreen implements Screen {
 
         // Loop over each bullet and remove it if it is out of the level
         player.getBullets().removeIf(bullet -> {
-            if (bullet.isOutOfLevelBounds()) {
-                currentLevel.getChildren().remove(bullet);
-                return true;
+            boolean remove = false;
+            for (Crawler crawler : crawlers) {
+                if (bullet.intersects(crawler.getBoundsInParent())) {
+                    levelDebugOverlay.showMessage("Crawler has been shot", true);
+                    remove = true;
+                }
             }
-            return false;
+            if (bullet.isOutOfLevelBounds()) {
+                remove = true;
+            }
+            if (remove) {
+                currentLevel.getChildren().remove(bullet);
+            }
+            return remove;
         });
         // Update bullets
         for (Bullet bullet : player.getBullets()) {
             bullet.tick();
+        }
+
+        // Crawlers
+        for (Crawler crawler : crawlers) {
+            crawler.tick();
+            if (player.intersects(crawler.getBoundsInParent())) {
+                levelDebugOverlay.showMessage("Crawler is hurting player", false);
+            }
         }
     }
 
