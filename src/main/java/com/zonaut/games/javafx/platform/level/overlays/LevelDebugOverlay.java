@@ -15,11 +15,13 @@ import java.time.Instant;
 
 public class LevelDebugOverlay extends Pane {
 
+    public static Background RED = new Background(new BackgroundFill(Color.web("d34251"), CornerRadii.EMPTY, Insets.EMPTY));
+    public static Background GREEN = new Background(new BackgroundFill(Color.web("87ba4e"), CornerRadii.EMPTY, Insets.EMPTY));
+    public static Background ORANGE = new Background(new BackgroundFill(Color.web("eeb540"), CornerRadii.EMPTY, Insets.EMPTY));
+    public static Background PURPLE = new Background(new BackgroundFill(Color.web("9177d4"), CornerRadii.EMPTY, Insets.EMPTY));
+
     private final Font font = Font.font("Monospace", FontWeight.NORMAL, 14);
     private final Font fontBold = Font.font("Monospace", FontWeight.BOLD, 14);
-
-    private final Background red = new Background(new BackgroundFill(Color.rgb(255, 0, 0, 0.4), CornerRadii.EMPTY, Insets.EMPTY));
-    private final Background green = new Background(new BackgroundFill(Color.rgb(46, 182, 100, 0.4), CornerRadii.EMPTY, Insets.EMPTY));
 
     private final VBox debugInformation;
 
@@ -29,6 +31,8 @@ public class LevelDebugOverlay extends Pane {
 
     private VBox messageWrapper;
     private Text message;
+
+    private Instant lastMessage = Instant.now();
 
     public LevelDebugOverlay() {
 
@@ -61,11 +65,22 @@ public class LevelDebugOverlay extends Pane {
         debugInformation.getChildren().addAll(
                 levelTitle,
                 levelDimensions,
-                playerPosition
+                playerPosition,
+                messageWrapper
         );
 
         getChildren().addAll(debugInformation);
 
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if (lastMessage.isBefore(Instant.now().minus(Duration.ofMillis(3000)))) {
+                    message.setText("");
+                    debugInformation.getChildren().remove(messageWrapper);
+                }
+            }
+        };
+        timer.start();
     }
 
     public void updateLevelName(LevelLoader levelLoader) {
@@ -77,27 +92,13 @@ public class LevelDebugOverlay extends Pane {
         this.playerPosition.setText("Player position : X " + player.getX() + ", Y " + player.getY());
     }
 
-    public void showMessage(String message, boolean success) {
-        if (!this.debugInformation.getChildren().contains(this.messageWrapper)) {
-            this.message.setText(message);
-            this.debugInformation.getChildren().add(this.messageWrapper);
-            this.messageWrapper.setBackground(success ? green : red);
-            Instant start = Instant.now();
-            AnimationTimer timer = new AnimationTimer() {
-                @Override
-                public void handle(long now) {
-                    if (start.isBefore(Instant.now().minus(Duration.ofMillis(1500)))) {
-                        removeMessageWrapper();
-                        stop();
-                    }
-                }
-            };
-            timer.start();
+    public void showMessage(String message, Background background) {
+        if (!debugInformation.getChildren().contains(messageWrapper)) {
+            debugInformation.getChildren().add(messageWrapper);
         }
-    }
-
-    private void removeMessageWrapper() {
-        this.debugInformation.getChildren().remove(this.messageWrapper);
+        this.message.setText(message);
+        this.messageWrapper.setBackground(background);
+        lastMessage = Instant.now();
     }
 
 }

@@ -42,6 +42,7 @@ public class LevelScreen implements Screen {
     private List<Crawler> crawlers = new ArrayList<>();
 
     private LevelDebugOverlay levelDebugOverlay;
+    private long lastRespawnCheck;
 
     public LevelScreen(int levelNumber) {
         this.scene = new Scene(sceneRoot, AppConfig.getWindowWidth(), AppConfig.getWindowHeight());
@@ -92,10 +93,7 @@ public class LevelScreen implements Screen {
         /////////////////////////////////////////////////
 
         // TODO Get location from object layers ???
-        double crawlerPositionY = (levelLoader.getMapHeight() -2) * AppConfig.getTileSize();
-        Crawler crawler = new Crawler(levelLoader, 640, crawlerPositionY + 7);
-        crawlers.add(crawler);
-        currentLevel.getChildren().add(crawler);
+        spawnCrawlers();
 
         /////////////////////////////////////////////////
         /////////////////////////////////////////////////
@@ -120,7 +118,7 @@ public class LevelScreen implements Screen {
         panPlayerInViewport();
 
         ///
-        /// TODO test
+        /// TODO Refactor everything below so our game loop only consists of method calls
         ///
 
         levelDebugOverlay.updatePlayerPosition(player);
@@ -130,7 +128,7 @@ public class LevelScreen implements Screen {
             player.setX(playerStartPositionX);
             player.setY(playerStartPositionY);
             currentLevel.setLayoutX(playerStartPositionX);
-            levelDebugOverlay.showMessage("You just died ! Resetting player to start position.", false);
+            levelDebugOverlay.showMessage("You just died ! Resetting player to start position.", LevelDebugOverlay.RED);
         }
 
         // Collect coins if we intersect them
@@ -139,7 +137,7 @@ public class LevelScreen implements Screen {
             if (player.intersects(block.getBoundsInParent())) {
                 currentLevel.getChildren().remove(block);
                 String message = String.format("Picked up a collectible on X %f - Y %f", block.getBoundsInParent().getMinX(), block.getBoundsInParent().getMinY());
-                levelDebugOverlay.showMessage(message, true);
+                levelDebugOverlay.showMessage(message, LevelDebugOverlay.GREEN);
                 return true;
             }
             return false;
@@ -147,13 +145,16 @@ public class LevelScreen implements Screen {
 
         // Loop over each bullet and remove it if it is out of the level
         player.getBullets().removeIf(bullet -> {
-            boolean remove = false;
-            for (Crawler crawler : crawlers) {
+            boolean remove;
+            remove = crawlers.removeIf(crawler -> {
                 if (bullet.intersects(crawler.getBoundsInParent())) {
-                    levelDebugOverlay.showMessage("Crawler has been shot", true);
-                    remove = true;
+                    levelDebugOverlay.showMessage("Crawler has been shot", LevelDebugOverlay.ORANGE);
+                    currentLevel.getChildren().remove(crawler);
+                    return true;
                 }
-            }
+                return false;
+            });
+
             if (bullet.isOutOfLevelBounds()) {
                 remove = true;
             }
@@ -162,18 +163,21 @@ public class LevelScreen implements Screen {
             }
             return remove;
         });
-        // Update bullets
+
+        // Update remaining bullets
         for (Bullet bullet : player.getBullets()) {
             bullet.tick();
         }
-
-        // Crawlers
+        // Update remaining crawlers
         for (Crawler crawler : crawlers) {
             crawler.tick();
             if (player.intersects(crawler.getBoundsInParent())) {
-                levelDebugOverlay.showMessage("Crawler is hurting player", false);
+                levelDebugOverlay.showMessage("Crawler is hurting player", LevelDebugOverlay.RED);
             }
         }
+
+        // TODO This is for developing purposes
+        reSpawnEntities();
     }
 
     /**
@@ -226,6 +230,37 @@ public class LevelScreen implements Screen {
             currentLevel.setLayoutX(minLayoutX);
         }
 
+    }
+
+    ///
+    /// TEMP
+    ///
+
+    // Re-spawning entities for developing in a fixed interval time
+    private void reSpawnEntities() {
+        if (lastRespawnCheck + 10000 < System.currentTimeMillis()) {
+            if (crawlers.isEmpty()) {
+                spawnCrawlers();
+            }
+            if (levelLoader.getCollectibles().isEmpty()) {
+                // TODO ReSpawn collectibles
+            }
+            lastRespawnCheck = System.currentTimeMillis();
+        }
+    }
+
+    private void spawnCrawlers() {
+        levelDebugOverlay.showMessage("Spawning crawlers", LevelDebugOverlay.PURPLE);
+        double crawlerPositionY = (levelLoader.getMapHeight() -2) * AppConfig.getTileSize();
+        Crawler crawler = new Crawler(levelLoader, 640, crawlerPositionY + 7);
+        crawlers.add(crawler);
+        // Add before layer so it doesn't overlap
+        if (currentLevel.getChildren().contains(player)) {
+            int playerIndex = currentLevel.getChildren().indexOf(player);
+            currentLevel.getChildren().add(playerIndex, crawler);
+        } else {
+            currentLevel.getChildren().add(crawler);
+        }
     }
 
 }
