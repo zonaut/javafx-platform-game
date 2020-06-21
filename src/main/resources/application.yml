@@ -8,13 +8,12 @@ app:
   windowWidth: 1280
   windowHeight: 720
 
-  levelBasePath: levels/level
-  levelProperties: level.yml
-  levelMap: level.tmx
+  levelConfig: levels/level{0}/level.yml
+  levelMap: levels/level{0}/level.tmx
 
 images:
-  icon: /icon.png
-  player: /images/entities/player.png
-  bullet: /images/entities/bullet.png
-  crawler: /images/entities/crawler.png
+  icon: icon.png
+  player: images/entities/player.png
+  bullet: images/entities/bullet.png
+  crawler: images/entities/crawler.png
 

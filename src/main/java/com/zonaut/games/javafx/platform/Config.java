@@ -9,13 +9,14 @@ import javafx.scene.paint.Color;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 
 public final class Config {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper(new YAMLFactory());
 
     private static final String UNIX_FS = "/";
-    private static final String RESOURCES_PATH = replaceFileSeparator("src/main/resources");
+    private static final String RESOURCES_PATH = replaceFileSeparator("src/main/resources/");
     private static final String PROPERTIES_FILE = "application.yml";
 
     public static final Config INSTANCE;
@@ -43,12 +44,12 @@ public final class Config {
     }
 
     public static Image getImage(String path) {
-        final InputStream inputStream = Config.class.getResourceAsStream(replaceFileSeparator(path));
+        final InputStream inputStream = Config.class.getResourceAsStream(replaceFileSeparator(UNIX_FS + path));
         return new Image(inputStream);
     }
 
     public static void loadLevelConfig(int value) {
-        final String properties = INSTANCE.app.levelBasePath + value + UNIX_FS + INSTANCE.app.levelProperties;
+        final String properties = MessageFormat.format(INSTANCE.app.levelConfig, value);
         try (InputStream inputStream = Config.class.getClassLoader().getResourceAsStream(replaceFileSeparator(properties))) {
             LEVEL = OBJECT_MAPPER.readValue(inputStream, LevelConfig.class);
         } catch (IOException e) {
@@ -73,8 +74,7 @@ public final class Config {
         public int windowWidth;
         public int windowHeight;
 
-        public String levelBasePath;
-        public String levelProperties;
+        public String levelConfig;
         public String levelMap;
 
         public double getFpsInterval() {
@@ -90,13 +90,13 @@ public final class Config {
     }
 
     public static class LevelConfig {
-        public int number;
+        public int id;
         public String title;
         public String story;
         public Color backgroundColor;
 
         public String getLevelMapPath() {
-            final String path = RESOURCES_PATH + UNIX_FS +  INSTANCE.app.levelBasePath + LEVEL.number + UNIX_FS + INSTANCE.app.levelMap;
+            final String path = RESOURCES_PATH + MessageFormat.format(INSTANCE.app.levelMap, LEVEL.id);
             return replaceFileSeparator(path);
         }
     }

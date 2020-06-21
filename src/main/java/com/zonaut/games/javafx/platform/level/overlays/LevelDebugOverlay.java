@@ -85,7 +85,7 @@ public class LevelDebugOverlay extends Pane {
     }
 
     public void updateLevelName(LevelLoader levelLoader) {
-        this.levelTitle.setText("Level " + Config.LEVEL.number + " : " + Config.LEVEL.title);
+        this.levelTitle.setText("Level " + Config.LEVEL.id + " : " + Config.LEVEL.title);
         this.levelDimensions.setText("Level dimensions (PX) : W " + levelLoader.getLevelPixelWidth() + ", H " + levelLoader.getLevelPixelHeight());
     }
 
