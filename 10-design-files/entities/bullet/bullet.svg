@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
-   sodipodi:docname="crawler.svg">
+   sodipodi:docname="bullet.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="220.67791"
-     inkscape:cy="683.29699"
+     inkscape:zoom="3.959798"
+     inkscape:cx="247.66445"
+     inkscape:cy="686.13471"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -54,26 +54,26 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Layer 1"
+     inkscape:label="bullet"
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-87)">
     <rect
-       style="fill:#afdde9;fill-opacity:1;stroke:none;stroke-width:1.44133556;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
+       style="fill:#afdde9;fill-opacity:1;stroke:none;stroke-width:1.35675228;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
        id="rect949"
-       width="104.51041"
+       width="92.604164"
        height="26.45834"
        x="18.52084"
        y="106.49999" />
     <rect
-       style="fill:#800000;stroke:none;stroke-width:1.34397638;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
+       style="fill:#000000;stroke:none;stroke-width:0.86753285;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
        id="rect827"
-       width="21.16666"
-       height="11.906235"
-       x="21.166666"
-       y="115.76044"
-       inkscape:export-xdpi="54.000019"
-       inkscape:export-ydpi="54.000019" />
+       width="13.229166"
+       height="7.9374843"
+       x="21.166668"
+       y="117.08334"
+       inkscape:export-xdpi="19.200003"
+       inkscape:export-ydpi="19.200003" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:7.05555534px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -84,38 +84,38 @@
          id="tspan911"
          x="20.835943"
          y="111.79166"
-         style="font-size:3.52777767px;stroke-width:0.26458332">TEXT</tspan><tspan
+         style="font-size:3.52777767px;stroke-width:0.26458332">BULLET</tspan><tspan
          sodipodi:role="line"
          x="20.835943"
          y="120.6111"
          style="font-size:3.52777767px;stroke-width:0.26458332"
          id="tspan3781" /></text>
     <rect
-       style="fill:#aa0000;stroke:none;stroke-width:1.34397638;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
+       style="fill:#333333;stroke:none;stroke-width:0.86753279;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
        id="rect827-3"
-       width="21.16666"
-       height="11.906235"
-       x="46.30209"
-       y="115.76043"
-       inkscape:export-xdpi="54.000019"
-       inkscape:export-ydpi="54.000019" />
+       width="13.229166"
+       height="7.9374843"
+       x="38.364586"
+       y="117.08334"
+       inkscape:export-xdpi="19.200003"
+       inkscape:export-ydpi="19.200003" />
     <rect
-       style="fill:#d40000;stroke:none;stroke-width:1.34397638;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
+       style="fill:#666666;stroke:none;stroke-width:0.86753279;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
        id="rect827-6"
-       width="21.16666"
-       height="11.906235"
-       x="71.437508"
-       y="115.76044"
-       inkscape:export-xdpi="54.000019"
-       inkscape:export-ydpi="54.000019" />
+       width="13.229166"
+       height="7.9374843"
+       x="55.562504"
+       y="117.08335"
+       inkscape:export-xdpi="19.200003"
+       inkscape:export-ydpi="19.200003" />
     <rect
-       style="fill:#aa0000;stroke:none;stroke-width:1.34397638;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
-       id="rect827-6-7"
-       width="21.16666"
-       height="11.906235"
-       x="96.572922"
-       y="115.76044"
-       inkscape:export-xdpi="54.000019"
-       inkscape:export-ydpi="54.000019" />
+       style="fill:#333333;stroke:none;stroke-width:0.86753279;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
+       id="rect827-7"
+       width="13.229166"
+       height="7.9374843"
+       x="72.760422"
+       y="117.08335"
+       inkscape:export-xdpi="19.200003"
+       inkscape:export-ydpi="19.200003" />
   </g>
 </svg>

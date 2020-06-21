@@ -2,6 +2,7 @@ package com.zonaut.games.javafx.platform.entities;
 
 import com.zonaut.games.javafx.platform.Config;
 import com.zonaut.games.javafx.platform.level.LevelLoader;
+import com.zonaut.games.javafx.platform.utils.ImageUtil;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
@@ -18,11 +19,13 @@ public class Crawler extends ImageView {
 
     private final LevelLoader levelLoader;
 
-    private double width;
-    private double height;
-
     private boolean isMovingLeft;
     private boolean isMovingRight;
+
+    private final Image[] crawlerSprite;
+    private final int crawlerSpriteDuration;
+
+    private Animation animation;
 
     public Crawler(LevelLoader levelLoader, double x, double y) {
         this.levelLoader = levelLoader;
@@ -32,17 +35,20 @@ public class Crawler extends ImageView {
 
         Image image = Config.getImage(Config.INSTANCE.images.crawler);
 
-        this.width = image.getWidth();
-        this.height = image.getHeight();
-        setFitWidth(width);
-        setFitHeight(height);
+        crawlerSprite = ImageUtil.getFrom(image, 0, 0, 45, 25, 4);
+        crawlerSpriteDuration = 2000;
 
-        setImage(image);
+        setFitWidth(crawlerSprite[0].getWidth());
+        setFitHeight(crawlerSprite[0].getHeight());
 
         isMovingRight = true;
+
+        animation = new Animation(crawlerSpriteDuration, crawlerSprite);
+        animation.play();
     }
 
     public void tick() {
+        updateAnimation();
 
         if (getX() <= 0) {
             isMovingRight = true;
@@ -77,6 +83,10 @@ public class Crawler extends ImageView {
             setX(getX() - SPEED * DELAY);
         }
 
+    }
+
+    public void updateAnimation() {
+        setImage(animation.getImage());
     }
 
 }
