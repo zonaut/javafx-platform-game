@@ -1,46 +1,27 @@
 package com.zonaut.games.javafx.platform.entities;
 
 import com.zonaut.games.javafx.platform.Config;
+import com.zonaut.games.javafx.platform.common.Direction;
 import com.zonaut.games.javafx.platform.level.Block;
 import com.zonaut.games.javafx.platform.level.LevelLoader;
 import com.zonaut.games.javafx.platform.utils.ImageUtil;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-public class Bullet extends ImageView {
+public class Bullet extends AnimatedEntity {
 
-    private static final Logger LOG = LogManager.getLogger(Bullet.class);
+    public Bullet(double x, double y, Direction direction, LevelLoader levelLoader) {
+        super (x, y, 400, levelLoader);
+        this.direction = direction;
+        this.levelLoader = levelLoader;
 
-    private static final double DELAY = 1.0 / Config.INSTANCE.app.fps;
-    private static final int BULLET_SPEED = 400;
-
-    private LevelLoader levelLoader;
-    private Player player;
-    private boolean isFacingRight;
-
-    private final Image[] bulletSprite;
-    private final int bulletSpriteDuration;
-
-    private Animation animation;
-
-    public Bullet(double x, double y, boolean isFacingRight, LevelLoader levelLoader, Player player) {
         Image image = Config.getImage(Config.INSTANCE.images.bullet);
-
-        bulletSprite = ImageUtil.getFrom(image, 0, 0, 10, 6, 4);
-        bulletSpriteDuration = 500;
-
+        Image[] bulletSprite = ImageUtil.getFrom(image, 0, 0, 10, 6, 4);
+        int bulletSpriteDuration = 500;
         setFitWidth(bulletSprite[0].getWidth());
         setFitHeight(bulletSprite[0].getHeight());
 
-        this.isFacingRight = isFacingRight;
-        this.levelLoader = levelLoader;
-        this.player = player;
-
-        setX(x);
         // TODO Tweak the starting position of the bullet a bit
-        setY(y + (player.getHeight() / 2) - (image.getHeight() / 2));
+        setY(y + 16);
 
         animation = new Animation(bulletSpriteDuration, bulletSprite);
         animation.play();
@@ -48,17 +29,14 @@ public class Bullet extends ImageView {
         tick();
     }
 
+    @Override
     public void tick() {
         updateAnimation();
-        if (isFacingRight) {
-            setX(getX() + BULLET_SPEED * DELAY);
+        if (direction.equals(Direction.LEFT)) {
+            setX(getX() - speedX * DELAY);
         } else {
-            setX(getX() - BULLET_SPEED * DELAY);
+            setX(getX() + speedX * DELAY);
         }
-    }
-
-    public void updateAnimation() {
-        setImage(animation.getImage());
     }
 
     public boolean isOutOfLevelBounds() {

@@ -1,62 +1,37 @@
 package com.zonaut.games.javafx.platform.entities;
 
 import com.zonaut.games.javafx.platform.Config;
+import com.zonaut.games.javafx.platform.common.Direction;
 import com.zonaut.games.javafx.platform.level.LevelLoader;
 import com.zonaut.games.javafx.platform.utils.ImageUtil;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-public class Crawler extends ImageView {
+public class Crawler extends AnimatedEntity {
 
-    private static final Logger LOG = LogManager.getLogger(Crawler.class);
-
-    private static final double DELAY = 1.0 / Config.INSTANCE.app.fps;
-    private static final double SPEED = 100;
-
-    private final LevelLoader levelLoader;
-
-    private boolean isMovingLeft;
-    private boolean isMovingRight;
-
-    private final Image[] crawlerSprite;
-    private final int crawlerSpriteDuration;
-
-    private Animation animation;
-
-    public Crawler(LevelLoader levelLoader, double x, double y) {
-        this.levelLoader = levelLoader;
-
-        setX(x);
-        setY(y);
+    public Crawler(double x, double y, LevelLoader levelLoader) {
+        super (x, y, 100, levelLoader);
 
         Image image = Config.getImage(Config.INSTANCE.images.crawler);
-
-        crawlerSprite = ImageUtil.getFrom(image, 0, 0, 45, 25, 4);
-        crawlerSpriteDuration = 2000;
-
+        Image[] crawlerSprite = ImageUtil.getFrom(image, 0, 0, 45, 25, 4);
+        int crawlerSpriteDuration = 2000;
         setFitWidth(crawlerSprite[0].getWidth());
         setFitHeight(crawlerSprite[0].getHeight());
-
-        isMovingRight = true;
 
         animation = new Animation(crawlerSpriteDuration, crawlerSprite);
         animation.play();
     }
 
+    @Override
     public void tick() {
         updateAnimation();
 
         if (getX() <= 0) {
-            isMovingRight = true;
-            isMovingLeft = false;
+            direction = Direction.RIGHT;
         }
         if (getX() >= levelLoader.getLevelPixelWidth()) {
-            isMovingLeft = true;
-            isMovingRight = false;
+            direction = Direction.LEFT;
         }
 
         ////////////////////////////////////////////////////////////////////////
@@ -70,23 +45,22 @@ public class Crawler extends ImageView {
 
         if (intersects(bound1) || intersects(bound2)) {
             LOG.info("Crawler needs to change direction");
-            isMovingLeft = !isMovingLeft;
-            isMovingRight = !isMovingRight;
+            if (direction.equals(Direction.RIGHT)) {
+                direction = Direction.LEFT;
+            } else {
+                direction = Direction.RIGHT;
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////
 
         // Move
-        if (isMovingRight) {
-            setX(getX() + SPEED * DELAY);
+        if (direction.equals(Direction.RIGHT)) {
+            setX(getX() + speedX * DELAY);
         } else {
-            setX(getX() - SPEED * DELAY);
+            setX(getX() - speedX * DELAY);
         }
 
-    }
-
-    public void updateAnimation() {
-        setImage(animation.getImage());
     }
 
 }

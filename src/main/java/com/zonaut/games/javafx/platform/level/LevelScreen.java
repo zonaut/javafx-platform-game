@@ -1,6 +1,7 @@
 package com.zonaut.games.javafx.platform.level;
 
 import com.zonaut.games.javafx.platform.Config;
+import com.zonaut.games.javafx.platform.common.Direction;
 import com.zonaut.games.javafx.platform.entities.Bullet;
 import com.zonaut.games.javafx.platform.entities.Crawler;
 import com.zonaut.games.javafx.platform.entities.Player;
@@ -71,7 +72,7 @@ public class LevelScreen implements Screen {
         int playerStartPositionYOffset = 10; // An offset to make sure we don't start into a tile due to gravity
         playerStartPositionY = (levelLoader.getMapHeight() -2) * Config.INSTANCE.app.tileSize - playerStartPositionYOffset;
 
-        player = new Player(levelLoader, playerStartPositionX, playerStartPositionY, true);
+        player = new Player(playerStartPositionX, playerStartPositionY, Direction.RIGHT , levelLoader);
 
         levelKeyInputHandler = new LevelKeyInputHandler(scene, player);
 
@@ -252,7 +253,7 @@ public class LevelScreen implements Screen {
     private void spawnCrawlers() {
         levelDebugOverlay.showMessage("Spawning crawlers", LevelDebugOverlay.PURPLE);
         double crawlerPositionY = (levelLoader.getMapHeight() -2) * Config.INSTANCE.app.tileSize;
-        Crawler crawler = new Crawler(levelLoader, 640, crawlerPositionY + 7);
+        Crawler crawler = new Crawler(640, crawlerPositionY + 7, levelLoader);
         crawlers.add(crawler);
         // Add before layer so it doesn't overlap
         if (currentLevel.getChildren().contains(player)) {
