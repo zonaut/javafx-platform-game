@@ -10,10 +10,10 @@ I try to keep Win users into consideration when it comes to file separators but 
 ## Build & run
 
     // Run
-    mvn clean javafx:run
+    ./mvnw clean javafx:run
 
     // Build
-    mvn clean package
+    ./mvnw clean package
     
     // Run the build package
     java -jar target/javafx-platform-game-0.0.1-SNAPSHOT.jar 

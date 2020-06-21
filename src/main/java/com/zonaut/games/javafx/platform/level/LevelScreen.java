@@ -1,6 +1,6 @@
 package com.zonaut.games.javafx.platform.level;
 
-import com.zonaut.games.javafx.platform.config.AppConfig;
+import com.zonaut.games.javafx.platform.Config;
 import com.zonaut.games.javafx.platform.entities.Bullet;
 import com.zonaut.games.javafx.platform.entities.Crawler;
 import com.zonaut.games.javafx.platform.entities.Player;
@@ -45,7 +45,7 @@ public class LevelScreen implements Screen {
     private long lastRespawnCheck;
 
     public LevelScreen(int levelNumber) {
-        this.scene = new Scene(sceneRoot, AppConfig.getWindowWidth(), AppConfig.getWindowHeight());
+        this.scene = new Scene(sceneRoot, Config.INSTANCE.app.windowWidth, Config.INSTANCE.app.windowHeight);
         this.levelNumber = levelNumber;
     }
 
@@ -54,8 +54,8 @@ public class LevelScreen implements Screen {
         this.stage = stage;
 
         stage.setScene(scene);
-        stage.setHeight(AppConfig.getWindowHeight());
-        stage.setWidth(AppConfig.getWindowWidth());
+        stage.setWidth(Config.INSTANCE.app.windowWidth);
+        stage.setHeight(Config.INSTANCE.app.windowHeight);
 
         currentLevel = new Group();
 
@@ -69,21 +69,21 @@ public class LevelScreen implements Screen {
         //      Also test other position and panning
         playerStartPositionX = 0;
         int playerStartPositionYOffset = 10; // An offset to make sure we don't start into a tile due to gravity
-        playerStartPositionY = (levelLoader.getMapHeight() -2) * AppConfig.getTileSize() - playerStartPositionYOffset;
+        playerStartPositionY = (levelLoader.getMapHeight() -2) * Config.INSTANCE.app.tileSize - playerStartPositionYOffset;
 
         player = new Player(levelLoader, playerStartPositionX, playerStartPositionY, true);
 
         levelKeyInputHandler = new LevelKeyInputHandler(scene, player);
 
         // TODO Simple loop at 60 frames a second as set in the application.properties
-        KeyFrame frame = new KeyFrame(Duration.millis(AppConfig.getFpsInterval()), e -> loop());
+        KeyFrame frame = new KeyFrame(Duration.millis(Config.INSTANCE.app.getFpsInterval()), e -> loop());
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.play();
 
         // TODO use background color for now, maybe background or parallax in future
-        scene.setFill(levelLoader.getLevelConfig().getLevelBackgroundColor());
+        scene.setFill(Config.LEVEL.backgroundColor);
 
         levelDebugOverlay = new LevelDebugOverlay();
         levelDebugOverlay.updateLevelName(levelLoader);
@@ -189,8 +189,8 @@ public class LevelScreen implements Screen {
      */
     private void panPlayerInViewport() {
 
-        int sceneHeight = AppConfig.getWindowHeight();
-        int sceneWidth = AppConfig.getWindowWidth();
+        int sceneWidth = Config.INSTANCE.app.windowWidth;
+        int sceneHeight = Config.INSTANCE.app.windowHeight;
         int levelHeight = levelLoader.getLevelPixelHeight();
         int levelWidth = levelLoader.getLevelPixelWidth();
         int offsetCorrection = 24;
@@ -251,7 +251,7 @@ public class LevelScreen implements Screen {
 
     private void spawnCrawlers() {
         levelDebugOverlay.showMessage("Spawning crawlers", LevelDebugOverlay.PURPLE);
-        double crawlerPositionY = (levelLoader.getMapHeight() -2) * AppConfig.getTileSize();
+        double crawlerPositionY = (levelLoader.getMapHeight() -2) * Config.INSTANCE.app.tileSize;
         Crawler crawler = new Crawler(levelLoader, 640, crawlerPositionY + 7);
         crawlers.add(crawler);
         // Add before layer so it doesn't overlap

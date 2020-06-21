@@ -1,6 +1,6 @@
 package com.zonaut.games.javafx.platform.entities;
 
-import com.zonaut.games.javafx.platform.config.AppConfig;
+import com.zonaut.games.javafx.platform.Config;
 import com.zonaut.games.javafx.platform.level.Block;
 import com.zonaut.games.javafx.platform.level.LevelLoader;
 import javafx.scene.image.Image;
@@ -12,7 +12,7 @@ public class Bullet extends ImageView {
 
     private static final Logger LOG = LogManager.getLogger(Bullet.class);
 
-    private static final double DELAY = 1.0 / AppConfig.getFps();
+    private static final double DELAY = 1.0 / Config.INSTANCE.app.fps;
     private static final int BULLET_SPEED = 400;
 
     private LevelLoader levelLoader;
@@ -20,7 +20,7 @@ public class Bullet extends ImageView {
     private boolean isFacingRight;
 
     public Bullet(double x, double y, boolean isFacingRight, LevelLoader levelLoader, Player player) {
-        Image image = new Image(Bullet.class.getResourceAsStream(AppConfig.getPlayerBulletImage()));
+        Image image = Config.getImage(Config.INSTANCE.images.bullet);
         setImage(image);
 
         setFitWidth(image.getWidth());

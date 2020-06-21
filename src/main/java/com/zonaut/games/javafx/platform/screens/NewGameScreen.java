@@ -1,6 +1,6 @@
 package com.zonaut.games.javafx.platform.screens;
 
-import com.zonaut.games.javafx.platform.config.AppConfig;
+import com.zonaut.games.javafx.platform.Config;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -13,13 +13,13 @@ public class NewGameScreen extends AbstractScreen {
 
     private final int menuWrapperWidth = 600;
     private final int menuWrapperHeight = 400;
-    private final int menuWrapperX = (AppConfig.getWindowWidth() / 2) - (menuWrapperWidth / 2);
-    private final int menuWrapperY = (AppConfig.getWindowHeight() / 2) - (menuWrapperHeight / 2);
+    private final int menuWrapperX = (Config.INSTANCE.app.windowWidth / 2) - (menuWrapperWidth / 2);
+    private final int menuWrapperY = (Config.INSTANCE.app.windowHeight / 2) - (menuWrapperHeight / 2);
 
     private Group sceneRoot = new Group();
 
     public NewGameScreen() {
-        this.scene = new Scene(sceneRoot, AppConfig.getWindowWidth(), AppConfig.getWindowHeight());
+        this.scene = new Scene(sceneRoot, Config.INSTANCE.app.windowWidth, Config.INSTANCE.app.windowHeight);
 
         VBox centerWrapper = new VBox(10);
         centerWrapper.setMinWidth(menuWrapperWidth);

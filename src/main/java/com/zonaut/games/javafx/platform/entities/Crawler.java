@@ -1,6 +1,6 @@
 package com.zonaut.games.javafx.platform.entities;
 
-import com.zonaut.games.javafx.platform.config.AppConfig;
+import com.zonaut.games.javafx.platform.Config;
 import com.zonaut.games.javafx.platform.level.LevelLoader;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -13,7 +13,7 @@ public class Crawler extends ImageView {
 
     private static final Logger LOG = LogManager.getLogger(Crawler.class);
 
-    private static final double DELAY = 1.0 / AppConfig.getFps();
+    private static final double DELAY = 1.0 / Config.INSTANCE.app.fps;
     private static final double SPEED = 100;
 
     private final LevelLoader levelLoader;
@@ -30,7 +30,7 @@ public class Crawler extends ImageView {
         setX(x);
         setY(y);
 
-        Image image = new Image(Crawler.class.getResourceAsStream(AppConfig.getCrawlerImage()));
+        Image image = Config.getImage(Config.INSTANCE.images.crawler);
 
         this.width = image.getWidth();
         this.height = image.getHeight();

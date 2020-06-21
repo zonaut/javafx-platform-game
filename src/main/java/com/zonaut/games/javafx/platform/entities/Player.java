@@ -1,9 +1,8 @@
 package com.zonaut.games.javafx.platform.entities;
 
-import com.zonaut.games.javafx.platform.config.AppConfig;
+import com.zonaut.games.javafx.platform.Config;
 import com.zonaut.games.javafx.platform.level.Block;
 import com.zonaut.games.javafx.platform.level.LevelLoader;
-import com.zonaut.games.javafx.platform.screens.NewGameScreen;
 import com.zonaut.games.javafx.platform.utils.ImageUtil;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,7 +16,7 @@ public class Player extends ImageView {
 
     private static final Logger LOG = LogManager.getLogger(Player.class);
 
-    private static final double DELAY = 1.0 / AppConfig.getFps();
+    private static final double DELAY = 1.0 / Config.INSTANCE.app.fps;
 
     private static final double SPEED_X = 280; // Tweak value to desired speed
     private static final double JUMP_HEIGHT = 750; // Tweak value to desired height
@@ -58,7 +57,7 @@ public class Player extends ImageView {
         this.isFacingRight = isFacingRight;
 
         // TODO Use sprites for different player movement action like idle, walking, ...
-        Image image = new Image(Player.class.getResourceAsStream(AppConfig.getPlayerImage()));
+        Image image = Config.getImage(Config.INSTANCE.images.player);
 
         // Define all available sprites for our player
         // TODO Get this from app config ???
@@ -102,8 +101,8 @@ public class Player extends ImageView {
         if (getX() < 0) {
             setX(0);
         }
-        if (getX() > levelLoader.getLevelPixelWidth() - AppConfig.getTileSize()) {
-            setX(levelLoader.getLevelPixelWidth() - AppConfig.getTileSize());
+        if (getX() > levelLoader.getLevelPixelWidth() - Config.INSTANCE.app.tileSize) {
+            setX(levelLoader.getLevelPixelWidth() - Config.INSTANCE.app.tileSize);
         }
 
         // An offset is needed to reposition the player on collision otherwise the position is in the block
@@ -131,7 +130,7 @@ public class Player extends ImageView {
         for (Block block : levelLoader.getBlocks()) {
             if (intersects(block)) {
                 if (jumping && !block.isCanPassWhenJumping()) {
-                    setY(block.getMinY() + AppConfig.getTileSize() + OFFSET);
+                    setY(block.getMinY() + Config.INSTANCE.app.tileSize + OFFSET);
                     yMotionPosition = 0;
                 } else if (falling) {
                     setY(block.getMinY() - height - OFFSET);

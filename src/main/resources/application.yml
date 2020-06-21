@@ -1,0 +1,20 @@
+app:
+  title: JavaFX platform game
+  version: 0.0.1
+  debug: true
+
+  fps: 60
+  tileSize: 32
+  windowWidth: 1280
+  windowHeight: 720
+
+  levelBasePath: levels/level
+  levelProperties: level.yml
+  levelMap: level.tmx
+
+images:
+  icon: /icon.png
+  player: /images/entities/player.png
+  bullet: /images/entities/bullet.png
+  crawler: /images/entities/crawler.png
+

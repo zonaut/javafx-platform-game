@@ -1,6 +1,6 @@
 package com.zonaut.games.javafx.platform.screens;
 
-import com.zonaut.games.javafx.platform.config.AppConfig;
+import com.zonaut.games.javafx.platform.Config;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
@@ -28,8 +28,8 @@ public abstract class AbstractScreen implements Screen {
         this.stage = stage;
 
         stage.setScene(scene);
-        stage.setHeight(AppConfig.getWindowHeight());
-        stage.setWidth(AppConfig.getWindowWidth());
+        stage.setWidth(Config.INSTANCE.app.windowWidth);
+        stage.setHeight(Config.INSTANCE.app.windowHeight);
 
         attachKeyHandler();
 

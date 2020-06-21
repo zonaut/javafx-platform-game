@@ -1,7 +1,6 @@
 package com.zonaut.games.javafx.platform.level;
 
-import com.zonaut.games.javafx.platform.config.AppConfig;
-import com.zonaut.games.javafx.platform.config.LevelConfig;
+import com.zonaut.games.javafx.platform.Config;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,8 +30,6 @@ public class LevelLoader {
 
     private Group currentLevel;
 
-    private LevelConfig levelConfig;
-
     private int mapWidth;
     private int mapHeight;
 
@@ -47,22 +44,21 @@ public class LevelLoader {
 
     public LevelLoader(Group currentLevel, int levelNumber) {
 
-        levelConfig = new LevelConfig(AppConfig.getLevelPath() + levelNumber + AppConfig.getLevelPropertiesFile(), levelNumber);
-        LOG.info("Loading level {} : {} ... ", levelNumber, levelConfig.getLevelTitle());
+        Config.loadLevelConfig(levelNumber);
+        LOG.info("Loading level {} : {} ... ", levelNumber, Config.LEVEL.title);
 
-        String filename = AppConfig.getResourcesPath() + AppConfig.getLevelPath() + levelNumber + AppConfig.getLevelFilePath();
         try {
             TMXMapReader mapReader = new TMXMapReader();
 
-            Map map = mapReader.readMap(filename);
+            Map map = mapReader.readMap(Config.LEVEL.getLevelMapPath());
 
             this.currentLevel = currentLevel;
 
             mapWidth = map.getWidth();
             mapHeight = map.getHeight();
 
-            levelPixelHeight = mapHeight * AppConfig.getTileSize();
-            levelPixelWidth = mapWidth * AppConfig.getTileSize();
+            levelPixelHeight = mapHeight * Config.INSTANCE.app.tileSize;
+            levelPixelWidth = mapWidth * Config.INSTANCE.app.tileSize;
 
             // TODO Fixed names for layers so we know what layer does what
             String BASE_LAYER_NAME = "base-layer";
@@ -76,8 +72,8 @@ public class LevelLoader {
                 for (int y = 0; y < mapHeight; y++) {
                     for (int x = 0; x < mapWidth; x++) {
 
-                        double positionX = x *  AppConfig.getTileSize();
-                        double positionY = y * AppConfig.getTileSize();
+                        double positionX = x *  Config.INSTANCE.app.tileSize;
+                        double positionY = y * Config.INSTANCE.app.tileSize;
 
                         Tile tile = tileLayer.getTileAt(x, y);
                         // TODO A tile is null if we don't have a tile in place, should we always set a transparent tile?
@@ -90,7 +86,7 @@ public class LevelLoader {
                                 tiles.put(tileId, convertedImage);
                             }
 
-                            Block block = new Block(positionX, positionY, AppConfig.getTileSize(), AppConfig.getTileSize(), tileId);
+                            Block block = new Block(positionX, positionY, Config.INSTANCE.app.tileSize, Config.INSTANCE.app.tileSize, tileId);
                             ImageView imageView = new ImageView(tiles.get(block.getId()));
                             imageView.setTranslateX(block.getMinX());
                             imageView.setTranslateY(block.getMinY());
@@ -140,10 +136,6 @@ public class LevelLoader {
     ///
     /// Getters
     ///
-
-    public LevelConfig getLevelConfig() {
-        return levelConfig;
-    }
 
     public Group getCurrentLevel() {
         return currentLevel;

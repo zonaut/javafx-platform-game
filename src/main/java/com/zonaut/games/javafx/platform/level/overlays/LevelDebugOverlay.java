@@ -1,5 +1,6 @@
 package com.zonaut.games.javafx.platform.level.overlays;
 
+import com.zonaut.games.javafx.platform.Config;
 import com.zonaut.games.javafx.platform.entities.Player;
 import com.zonaut.games.javafx.platform.level.LevelLoader;
 import javafx.animation.AnimationTimer;
@@ -84,7 +85,7 @@ public class LevelDebugOverlay extends Pane {
     }
 
     public void updateLevelName(LevelLoader levelLoader) {
-        this.levelTitle.setText("Level " + levelLoader.getLevelConfig().getLevelNumber() + " : " + levelLoader.getLevelConfig().getLevelTitle());
+        this.levelTitle.setText("Level " + Config.LEVEL.number + " : " + Config.LEVEL.title);
         this.levelDimensions.setText("Level dimensions (PX) : W " + levelLoader.getLevelPixelWidth() + ", H " + levelLoader.getLevelPixelHeight());
     }
 

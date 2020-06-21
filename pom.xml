@@ -29,6 +29,9 @@
     <!-- https://mvnrepository.com/artifact/org.mapeditor/libtiled -->
     <map-editor.version>1.2.3</map-editor.version>
 
+    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml -->
+    <jackson.version>2.11.0</jackson.version>
+
     <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-maven-plugin -->
     <java-fx-maven-plugin.version>0.0.4</java-fx-maven-plugin.version>
     <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
@@ -72,6 +75,17 @@
       <groupId>org.mapeditor</groupId>
       <artifactId>libtiled</artifactId>
       <version>${map-editor.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.dataformat</groupId>
+      <artifactId>jackson-dataformat-yaml</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>${jackson.version}</version>
     </dependency>
 
   </dependencies>
