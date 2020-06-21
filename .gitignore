@@ -1,1 +1,5 @@
-target
+# Examples on with https://github.com/github/gitignore
+
+target/
+.idea/
+*.iml
