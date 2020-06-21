@@ -14,7 +14,7 @@ public final class Config {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper(new YAMLFactory());
 
-    private static final String UNIX_FILE_SEPARATOR = "/";
+    private static final String UNIX_FS = "/";
     private static final String RESOURCES_PATH = replaceFileSeparator("src/main/resources");
     private static final String PROPERTIES_FILE = "application.yml";
 
@@ -39,7 +39,7 @@ public final class Config {
     ///
 
     public static String replaceFileSeparator(String value) {
-        return value.replace(UNIX_FILE_SEPARATOR, File.separator);
+        return value.replace(UNIX_FS, File.separator);
     }
 
     public static Image getImage(String path) {
@@ -48,8 +48,8 @@ public final class Config {
     }
 
     public static void loadLevelConfig(int value) {
-        final String properties = INSTANCE.app.levelBasePath + value + UNIX_FILE_SEPARATOR + INSTANCE.app.levelProperties;
-        try (InputStream inputStream = Config.class.getClassLoader().getResourceAsStream(properties)) {
+        final String properties = INSTANCE.app.levelBasePath + value + UNIX_FS + INSTANCE.app.levelProperties;
+        try (InputStream inputStream = Config.class.getClassLoader().getResourceAsStream(replaceFileSeparator(properties))) {
             LEVEL = OBJECT_MAPPER.readValue(inputStream, LevelConfig.class);
         } catch (IOException e) {
             throw new RuntimeException("Can't process application.yml!", e);
@@ -96,7 +96,8 @@ public final class Config {
         public Color backgroundColor;
 
         public String getLevelMapPath() {
-            return RESOURCES_PATH + UNIX_FILE_SEPARATOR +  INSTANCE.app.levelBasePath + LEVEL.number + UNIX_FILE_SEPARATOR + INSTANCE.app.levelMap;
+            final String path = RESOURCES_PATH + UNIX_FS +  INSTANCE.app.levelBasePath + LEVEL.number + UNIX_FS + INSTANCE.app.levelMap;
+            return replaceFileSeparator(path);
         }
     }
 
