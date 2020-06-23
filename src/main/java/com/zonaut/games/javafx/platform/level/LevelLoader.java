@@ -24,9 +24,9 @@ public class LevelLoader {
 
     private static final Logger LOG = LogManager.getLogger(LevelLoader.class);
 
-    private static final List<Integer> SOLID_TILE_IDS = List.of(2, 3);
-    private static final List<Integer> PASSABLE_TILE_IDS = List.of(4);
-    private static final List<Integer> COLLECTIBLE_TILE_IDS = List.of(5, 6);
+    private static final List<Integer> SOLID_TILE_IDS = List.of(1, 2);
+    private static final List<Integer> PASSABLE_TILE_IDS = List.of(3);
+    private static final List<Integer> COLLECTIBLE_TILE_IDS = List.of(4, 5);
 
     private Group currentLevel;
 
