@@ -21,7 +21,7 @@
     <main-class>com.zonaut.games.javafx.platform.Main</main-class>
 
     <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-    <log4j.version>2.16.0</log4j.version>
+    <log4j.version>2.17.0</log4j.version>
 
     <!-- https://mvnrepository.com/artifact/org.openjfx -->
     <java-fx-version>15-ea+6</java-fx-version>
